@@ -17,8 +17,19 @@ app.get('/' , (req , res) =>{
 
 app.get('/profile', isLoggedIn , async (req , res)=>{
      let user = await userModel.findOne({email: req.user.email});
-           
-   res.render('profile', {user});
+      res.render('profile', {user});
+});
+
+app.post('/post', isLoggedIn , async (req , res)=>{
+     let user = await userModel.findOne({email: req.user.email});
+     let {content} = req.body;
+     let post = await postModel.create({
+         user: user._id,
+         content: content,
+      });
+      user.posts.push(post._id);
+      await user.save();
+       res.redirect('/profile');
 });
 
 app.get('/login', (req , res) =>{
@@ -29,9 +40,6 @@ app.post('/register' , async (req , res) =>{
    let {email, username , name , age , password} = req.body;
       let user = await userModel.findOne({email});
    if (user) return res.status(404).send('user already registered , Go to login');
-   else{
-      alert('Registered Successfully');
-   }
      
    bcrypt.genSalt(10 , (err, salt) =>{
     bcrypt.hash(password , salt , async (err , hash) =>{
@@ -66,7 +74,7 @@ app.post('/login' , async (req , res) =>{
 
 app.get('/logout' , async (req , res) =>{
         res.cookie("token" , "");
-        res.redirect('/profile');
+        res.redirect('/login');
 
 }); 
 
@@ -78,5 +86,7 @@ else{
        next();
    }
 }
+
+
 
 app.listen(3000);
