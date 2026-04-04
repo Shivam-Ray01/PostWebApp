@@ -12,32 +12,35 @@
                <a class="px-3 py-2 bg-red-500 rounded-lg mb-2 inline-block" href="/logout">Logout</a>
           </div>
           <h3 class="text-3xl mb-2"><span class="font-light">Hello, </span><%= user.name %></h3>
-            <h5 class="mb-4">You can create your posts...</h5>     
+            <h5 class="mb-4">Write your posts here...</h5>     
         <form action="/post" method="post">
         <textarea class="resize-none border-2 border-zinc-700 bg-transparent rounded-lg px-3 w-1/3 outline-none block" name="content" placeholder="Type Your post..."  ></textarea>     
          <input class="bg-blue-500 px-3 py-2 rounded-lg block mt-2 w-40 text-sm" type="submit" value="Create Post">
            </form> 
            <div class="posts mt-20" >
-           <h3 class="text-zinc-500 mb-2" >Your posts</h3>
+           <h3 class="text-zinc-500 mb-2" >Your posts....</h3>
            <div class="postcontainer">
-               <div class="post w-1/3 p-3 mb-3 border-zinc-700 outline-none border-[1px] rounded-lg">
-                    <h4 class="text-blue-500 mb-1">@Username</h4>
-                    <p class="tracking-tight">Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus, debitis.</p>
+             <% user.posts.reverse().forEach((post)=> {  %>
+             <div class="post w-1/3 p-3 mb-3 border-zinc-700 outline-none border-[1px] rounded-lg">
+                    <h4 class="text-blue-500 mb-1"><%= user.username%>  </h4>
+                    <p class="tracking-tight"><%= post.content %></p>
                 <div class="btns flex gap-5 mt-5">
                        <a class="text-blue-500" href="">👍</a>
                        <a class="text-zinc-500" href="">Edit</a>
+
+                        <form action="/delete" method="post">
+             <input type="hidden" name="postid" value="<%= post._id %>">
+             <button type="submit" class="bg-red-600 px-4 py-1 rounded-md text-white">Delete</button>
+          </form>
                 </div>
                </div>
-               <div class="post w-1/3 p-3 mb-3 border-zinc-700 outline-none border-[1px] rounded-lg">
-                    <h4 class="text-blue-500 mb-1">@Username</h4>
-                    <p class="tracking-tight">Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus, debitis.</p>
-                <div class="btns flex gap-5 mt-5">
-                       <a class="text-blue-500" href="">👍</a>
-                       <a class="text-zinc-500" href="">Edit</a>
-                </div>
-               </div>
+
+           <%  }) %>
+            
            </div>
            </div>
        </div>
 </body>
 </html>
+
+

@@ -17,6 +17,7 @@ app.get('/' , (req , res) =>{
 
 app.get('/profile', isLoggedIn , async (req , res)=>{
      let user = await userModel.findOne({email: req.user.email});
+    await  user.populate('posts');
       res.render('profile', {user});
 });
 
@@ -72,6 +73,17 @@ app.post('/login' , async (req , res) =>{
    });
 }); 
 
+app.post('/Delete', isLoggedIn, async (req , res) => {
+   let {postid} = req.body;
+
+   
+    await postModel.findByIdAndDelete(postid);
+       let user = await userModel.findOne({email: req.user.email});
+        user.posts.pull(postid);
+        await user.save();
+        res.redirect('/profile');
+});
+
 app.get('/logout' , async (req , res) =>{
         res.cookie("token" , "");
         res.redirect('/login');
@@ -86,7 +98,5 @@ else{
        next();
    }
 }
-
-
 
 app.listen(3000);
