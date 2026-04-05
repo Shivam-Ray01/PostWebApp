@@ -16,9 +16,16 @@ app.get('/' , (req , res) =>{
 });
 
 app.get('/profile', isLoggedIn , async (req , res)=>{
-     let user = await userModel.findOne({email: req.user.email});
-    await  user.populate('posts');
+     let user = await userModel.findOne({email: req.user.email}).populate('posts');
       res.render('profile', {user});
+});
+
+app.get('/like/:id', isLoggedIn , async (req , res)=>{
+     let post = await postModel.findOne({_id: req.params.id}).populate('user');
+     
+    post.like.push(req.user.iserid);
+      await post.save();
+      res.render('profile');
 });
 
 app.post('/post', isLoggedIn , async (req , res)=>{
