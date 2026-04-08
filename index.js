@@ -5,6 +5,7 @@ const postModel = require('./models/post');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const multerconfig = require('./config/multerconfig');
 
 app.set('view engine' , 'ejs');
 app.use(express.json());
@@ -12,7 +13,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 
 app.get('/' , (req , res) =>{
-    res.render('index'); 
+    res.render('login'); 
 });
 
 app.get('/profile', isLoggedIn , async (req , res)=>{
@@ -57,6 +58,10 @@ app.post('/post', isLoggedIn , async (req , res)=>{
 
 app.get('/login', (req , res) =>{
    res.render("login")
+});
+
+app.get('/register', (req , res) =>{
+   res.render("index");
 });
 
 app.post('/register' , async (req , res) =>{
