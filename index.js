@@ -5,7 +5,7 @@ const postModel = require('./models/post');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const multer = require('./config/multerconfig');
+const upload = require('./config/multerconfig');
 const path = require('path');
 
 app.set('view engine' , 'ejs');
